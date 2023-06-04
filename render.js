@@ -1,4 +1,4 @@
-//Стартовая страница
+//----Стартовая страница----
 
 export function renderStartPage({ contentElement }) {
     window.localStorage.removeItem("level");
@@ -32,13 +32,14 @@ export function renderStartPage({ contentElement }) {
     }
 }
 
-//Страница-загрузка игры
+//----Страница-загрузка игры----
 
 export function renderGamePage({ contentElement }) {
     let gamePageItems = ``;
     let fullGamePageItems = ``;
     let gamePageContent = "";
     let level;
+    let cardShirt = "close";
 
     let gameCards = JSON.parse(
         window.localStorage.getItem("gameCardCollection")
@@ -68,31 +69,111 @@ export function renderGamePage({ contentElement }) {
     if (gameCards.length === 12) level = "medium";
     if (gameCards.length === 18) level = "hard";
 
-    gamePageContent = `${headerElement}+
+    // Первоначально показывем полную колоду (закрытую)
+
+    gamePageContent = `${headerElement}
         
     <div class = "card__container card__container--full center">
-        ${getRenderElement(fullGamePageItems, fullGameCards)}
+        ${getRenderElement(
+            fullGamePageItems,
+            fullGameCards,
+            cardPicture,
+            cardShirt
+        )}
     </div>`;
-
-    // Первоначально показывем полную колоду
 
     contentElement.innerHTML = gamePageContent;
 
-    // По истечении указанного времени показываем игровую колоду
+    // По истечении указанного времени показываем полную колоду(открытую)
+
+    setTimeout(() => {
+        cardShirt = "open";
+        gamePageContent = `${headerElement}
+        
+    <div class = "card__container card__container--full center">
+        ${getRenderElement(
+            fullGamePageItems,
+            fullGameCards,
+            cardPicture,
+            cardShirt
+        )}
+    </div>`;
+
+        contentElement.innerHTML = gamePageContent;
+    }, 2000);
+
+    // По истечении указанного времени показываем игровую колоду(открытую)
 
     setTimeout(() => {
         gamePageContent = `${headerElement}+
             
     <div class = "card__container card__container--${level}">
-        ${getRenderElement(gamePageItems, gameCards)}
+        ${getRenderElement(gamePageItems, gameCards, cardPicture, cardShirt)}
     </div>`;
 
         contentElement.innerHTML = gamePageContent;
-        window.localStorage.setItem(
-            "gameStatus",
-            JSON.stringify("timeToRemember")
-        );
-    }, 2000);
+    }, 4000);
+
+    // По истечении указанного времени показываем игровую колоду(закрытую)
+
+    setTimeout(() => {
+        cardShirt = "close";
+
+        gamePageContent = `${headerElement}+
+            
+    <div class = "card__container card__container--${level}">
+        ${getRenderElement(gamePageItems, gameCards, cardPicture, cardShirt)}
+    </div>`;
+
+        contentElement.innerHTML = gamePageContent;
+    }, 6000);
+}
+
+// ----Ниже находятся вспомогательные функции----
+
+//Функция генерирует контент игровых карт
+
+function getRenderElement(element, Arr, cardPicture, cardShirt) {
+    for (let key of Arr) {
+        element =
+            element +
+            `<div class ='card__items card__items--${cardShirt}'
+                          data-suite=${key[1]}
+                          data-dignity=${key[0]}>
+
+                          ${cardPicture(key, cardShirt)}
+             </div>`;
+    }
+
+    return element;
+}
+// Функция генерирует игральную карту
+
+function cardPicture(key, cardShirt) {
+    if (cardShirt === "open") {
+        return `<div class ="card__firstSymbol">
+                        ${key[0] === "1" ? "10" : key[0]}
+                    </div>
+                    <div class ="card__secondSymbol">
+                        <img src=${suitePict(key[1])}>
+                    </div>
+                    <div class ="card__thirdSymbol">
+                        <img src=${suitePict(
+                            key[1]
+                        )} class = 'card__centerPicture'>
+                    </div>
+                    <div class ="card__fourSymbol ">
+                        <img src=${suitePict(key[1])}>
+                    </div>
+                    <div class ="card__fiveSymbol">
+                        ${key[0] === "1" ? "10" : key[0]}
+                    </div>`;
+    }
+    if (cardShirt === "close") {
+        return `<div class ="card__shirt">
+                    <img src='Рубашка.svg' alt='Трефы'>
+                </div>`;
+    }
 }
 
 // Функция подставляет рисунок масти
@@ -116,34 +197,3 @@ function suitePict(suite) {
         return picture;
     }
 }
-//Функция генерирует контент игровых карт
-
-function getRenderElement(element, Arr) {
-    for (let key of Arr) {
-        element =
-            element +
-            `<div class ='card__items'
-                          data-suite=${key[1]}
-                          data-dignity=${key[0]}>
-
-                <div class ="card__firstSymbol">
-                    ${key[0] === "1" ? "10" : key[0]}
-                </div>
-                <div class ="card__secondSymbol">
-                    <img src=${suitePict(key[1])}>
-                </div>
-                <div class ="card__thirdSymbol">
-                    <img src=${suitePict(key[1])} class = 'card__centerPicture'>
-                </div>
-                <div class ="card__fourSymbol ">
-                    <img src=${suitePict(key[1])}>
-                </div>
-                <div class ="card__fiveSymbol">
-                    ${key[0] === "1" ? "10" : key[0]}
-                </div>
-             </div>`;
-    }
-
-    return element;
-}
-//----------------------------------------------------------------------------------------

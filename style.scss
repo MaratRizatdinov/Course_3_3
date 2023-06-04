@@ -122,6 +122,9 @@ body {
         border-radius: 4px;
         display: block;
     }
+    &__shirt {
+        display: flex;
+    }
     &__firstSymbol,
     &__fiveSymbol {
         width: 11px;
