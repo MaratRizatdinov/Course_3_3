@@ -1,6 +1,21 @@
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./render.js":
+/*!*******************!*\
+  !*** ./render.js ***!
+  \*******************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   renderGamePage: () => (/* binding */ renderGamePage),
+/* harmony export */   renderStartPage: () => (/* binding */ renderStartPage)
+/* harmony export */ });
 //----Стартовая страница----
 
-export function renderStartPage({ contentElement }) {
+function renderStartPage({ contentElement }) {
     window.localStorage.removeItem("level");
     window.localStorage.removeItem("gameCardCollection");
 
@@ -34,7 +49,7 @@ export function renderStartPage({ contentElement }) {
 
 //----Страница-загрузка игры----
 
-export function renderGamePage({ contentElement }) {
+function renderGamePage({ contentElement }) {
     let gamePageItems = ``;
     let fullGamePageItems = ``;
     let gamePageContent = "";
@@ -197,3 +212,155 @@ function suitePict(suite) {
         return picture;
     }
 }
+
+
+/***/ }),
+
+/***/ "./tools.js":
+/*!******************!*\
+  !*** ./tools.js ***!
+  \******************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createRandomCardCollection: () => (/* binding */ createRandomCardCollection)
+/* harmony export */ });
+// Функция получает перетасованную колоду из 36 карт.
+//Создает случайный массив карт в зависимости от уровня и помещает в localStorage
+
+function createRandomCardCollection({ levelOfGame }) {
+    let fullCardCollection = [];
+    let gameCardCollection = [];
+    let cardSuite = ["s", "h", "d", "c"];
+    let cardDignity = ["A", "K", "Q", "J", "1", "9", "8", "7", "6"];
+
+    for (let suite of cardSuite) {
+        for (let dignity of cardDignity) {
+            fullCardCollection.push(dignity + suite);
+        }
+    }
+    window.localStorage.setItem(
+        "fullCardCollection",
+        JSON.stringify(fullCardCollection)
+    );
+
+    shuffle(fullCardCollection);
+    if (levelOfGame === "1") fullCardCollection.length = 3;
+    if (levelOfGame === "2") fullCardCollection.length = 6;
+    if (levelOfGame === "3") fullCardCollection.length = 9;
+
+    gameCardCollection = fullCardCollection.concat(fullCardCollection);
+
+    shuffle(gameCardCollection);
+
+    window.localStorage.setItem(
+        "gameCardCollection",
+        JSON.stringify(gameCardCollection)
+    );
+}
+
+// Функция-рандомизатор
+
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+}
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _render_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./render.js */ "./render.js");
+/* harmony import */ var _tools_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tools.js */ "./tools.js");
+
+
+let contentElement = document.querySelector(".container");
+let levelOfGame;
+//let gameStatus;
+
+window.localStorage.removeItem("gameStatus");
+
+(0,_render_js__WEBPACK_IMPORTED_MODULE_0__.renderStartPage)({ contentElement });
+
+let startButton = document.querySelector(".select__startbutton");
+
+startButton.addEventListener("click", () => {
+    if (startButton.disabled === true) {
+        alert("Выберите сложность!");
+        return;
+    }
+
+    levelOfGame = window.localStorage.getItem("level");
+
+    (0,_tools_js__WEBPACK_IMPORTED_MODULE_1__.createRandomCardCollection)({ levelOfGame });
+
+    (0,_render_js__WEBPACK_IMPORTED_MODULE_0__.renderGamePage)({ contentElement });
+});
+
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=bundle.js.map
