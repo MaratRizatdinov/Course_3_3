@@ -15,7 +15,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 //----Стартовая страница----
 
-function renderStartPage({ contentElement }) {
+async function renderStartPage({ contentElement }) {
     window.localStorage.removeItem("level");
     window.localStorage.removeItem("gameCardCollection");
 
@@ -120,7 +120,7 @@ function renderGamePage({ contentElement }) {
     // По истечении указанного времени показываем игровую колоду(открытую)
 
     setTimeout(() => {
-        gamePageContent = `${headerElement}+
+        gamePageContent = `${headerElement}
             
     <div class = "card__container card__container--${level}">
         ${getRenderElement(gamePageItems, gameCards, cardPicture, cardShirt)}
@@ -134,13 +134,14 @@ function renderGamePage({ contentElement }) {
     setTimeout(() => {
         cardShirt = "close";
 
-        gamePageContent = `${headerElement}+
+        gamePageContent = `${headerElement}
             
     <div class = "card__container card__container--${level}">
         ${getRenderElement(gamePageItems, gameCards, cardPicture, cardShirt)}
     </div>`;
 
         contentElement.innerHTML = gamePageContent;
+        
     }, 6000);
 }
 
@@ -191,7 +192,7 @@ function cardPicture(key, cardShirt) {
     }
 }
 
-// Функция подставляет рисунок масти
+// Функция подставляет рисунок  масти
 
 function suitePict(suite) {
     let picture = "";

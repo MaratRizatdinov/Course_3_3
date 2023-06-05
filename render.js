@@ -1,6 +1,6 @@
 //----Стартовая страница----
 
-export function renderStartPage({ contentElement }) {
+export async function renderStartPage({ contentElement }) {
     window.localStorage.removeItem("level");
     window.localStorage.removeItem("gameCardCollection");
 
@@ -34,7 +34,7 @@ export function renderStartPage({ contentElement }) {
 
 //----Страница-загрузка игры----
 
-export function renderGamePage({ contentElement }) {
+export  function renderGamePage({ contentElement }) {
     let gamePageItems = ``;
     let fullGamePageItems = ``;
     let gamePageContent = "";
@@ -105,7 +105,7 @@ export function renderGamePage({ contentElement }) {
     // По истечении указанного времени показываем игровую колоду(открытую)
 
     setTimeout(() => {
-        gamePageContent = `${headerElement}+
+        gamePageContent = `${headerElement}
             
     <div class = "card__container card__container--${level}">
         ${getRenderElement(gamePageItems, gameCards, cardPicture, cardShirt)}
@@ -119,13 +119,14 @@ export function renderGamePage({ contentElement }) {
     setTimeout(() => {
         cardShirt = "close";
 
-        gamePageContent = `${headerElement}+
+        gamePageContent = `${headerElement}
             
     <div class = "card__container card__container--${level}">
         ${getRenderElement(gamePageItems, gameCards, cardPicture, cardShirt)}
     </div>`;
 
         contentElement.innerHTML = gamePageContent;
+        
     }, 6000);
 }
 

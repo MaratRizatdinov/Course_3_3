@@ -10,7 +10,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
+                test: /\.css$/i,
                 use: [MiniCssExtractPlugin.loader, "css-loader"],
             },
             {
@@ -28,7 +28,6 @@ module.exports = {
         filename: "bundle.js",
     },
     plugins: [
-        // And here!
         new CopyPlugin({
             patterns: [
                 { from: "img", to: "static/img" },
@@ -43,5 +42,8 @@ module.exports = {
     optimization: {
         minimizer: ["...", new CssMinimizerPlugin()],
     },
-    devtool: process.env.NODE_ENV === "production" ? false : "source-map",
+    devtool:
+        process.env.NODE_ENV === "production"
+            ? "hidden-source-map"
+            : "source-map",
 };
