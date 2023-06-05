@@ -11,7 +11,7 @@
         "lint": "npm run lint:js && npm run lint:css",
         "prepare": "husky install",
         "build": "SET NODE_ENV='production' && webpack",
-        "start": "webpack serve ––open"
+        "start": "webpack serve"
     },
     "keywords": [],
     "author": "",

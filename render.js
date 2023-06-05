@@ -34,7 +34,7 @@ export async function renderStartPage({ contentElement }) {
 
 //----Страница-загрузка игры----
 
-export  function renderGamePage({ contentElement }) {
+export function renderGamePage({ contentElement }) {
     let gamePageItems = ``;
     let fullGamePageItems = ``;
     let gamePageContent = "";
@@ -126,6 +126,11 @@ export  function renderGamePage({ contentElement }) {
     </div>`;
 
         contentElement.innerHTML = gamePageContent;
+        
+        window.localStorage.setItem("gamestatus", "begingame");
+        let result = window.localStorage.getItem("gamestatus");
+        console.log(result);
+        return result;
         
     }, 6000);
 }

@@ -142,6 +142,11 @@ function renderGamePage({ contentElement }) {
 
         contentElement.innerHTML = gamePageContent;
         
+        window.localStorage.setItem("gamestatus", "begingame");
+        let result = window.localStorage.getItem("gamestatus");
+        console.log(result);
+        return result;
+        
     }, 6000);
 }
 
