@@ -176,7 +176,7 @@ function cardPicture(key, cardShirt) {
     }
 }
 
-// Функция подставляет рисунок масти
+// Функция подставляет рисунок  масти
 
 function suitePict(suite) {
     let picture = "";
