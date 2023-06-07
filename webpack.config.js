@@ -1,26 +1,13 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
-    entry: "./index.js",
+    entry: "./src/js/index.js",
     mode: process.env.NODE_ENV === "production" ? "production" : "development",
-    devServer: {
-        static: {
-            directory: path.join(__dirname, "dist"),
-        },
-        compress: true,
-        open: true,
-        port: 9000,
-    },
     module: {
         rules: [
-            {
-                test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader"],
-            },
+            { test: /\.css$/i, use: ["style-loader", "css-loader"] },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: "asset/resource",
@@ -34,24 +21,17 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "bundle.js",
+        clean: true,
     },
     plugins: [
         new CopyPlugin({
             patterns: [
-                { from: "img", to: "static/img" },
-                { from: "fonts", to: "static/fonts" },
+                { from: "./img", to: "./img" },
+                { from: "./fonts", to: "./fonts" },
             ],
         }),
         new HtmlWebpackPlugin({
             template: "./index.html",
         }),
-        new MiniCssExtractPlugin(),
     ],
-    optimization: {
-        minimizer: ["...", new CssMinimizerPlugin()],
-    },
-    devtool:
-        process.env.NODE_ENV === "production"
-            ? "hidden-source-map"
-            : "source-map",
 };

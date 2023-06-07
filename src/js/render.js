@@ -3,6 +3,7 @@
 export async function renderStartPage({ contentElement }) {
     window.localStorage.removeItem("level");
     window.localStorage.removeItem("gameCardCollection");
+    window.localStorage.removeItem("fullCardCollection");
 
     let selectPageContent = `<div class="select__container">
                             <div class="select__title">Выбери сложность</div>
@@ -34,7 +35,7 @@ export async function renderStartPage({ contentElement }) {
 
 //----Страница-загрузка игры----
 
-export function renderGamePage({ contentElement }) {
+export async function renderGamePage({ contentElement }) {
     let gamePageItems = ``;
     let fullGamePageItems = ``;
     let gamePageContent = "";
@@ -62,7 +63,7 @@ export function renderGamePage({ contentElement }) {
                                     <div class="header__timercounter header__timercounter--sec">0</div>
                                 </div>
                             </div>
-                            <div class="header__button global__button">Начать заново</div>
+                            <div class="header__button global__button global__button--disabled">Начать заново</div>
                           </div>`;
 
     if (gameCards.length === 6) level = "easy";
@@ -100,7 +101,7 @@ export function renderGamePage({ contentElement }) {
     </div>`;
 
         contentElement.innerHTML = gamePageContent;
-    }, 2000);
+    }, 1000);
 
     // По истечении указанного времени показываем игровую колоду(открытую)
 
@@ -112,7 +113,7 @@ export function renderGamePage({ contentElement }) {
     </div>`;
 
         contentElement.innerHTML = gamePageContent;
-    }, 4000);
+    }, 2000);
 
     // По истечении указанного времени показываем игровую колоду(закрытую)
 
@@ -127,12 +128,10 @@ export function renderGamePage({ contentElement }) {
 
         contentElement.innerHTML = gamePageContent;
         
-        window.localStorage.setItem("gamestatus", "begingame");
-        let result = window.localStorage.getItem("gamestatus");
-        console.log(result);
-        return result;
         
-    }, 6000);
+        
+        
+    }, 7000);
 }
 
 // ----Ниже находятся вспомогательные функции----
@@ -177,17 +176,17 @@ function cardPicture(key, cardShirt) {
     }
     if (cardShirt === "close") {
         return `<div class ="card__shirt">
-                    <img src='img/Рубашка.svg' alt='Трефы'>
+                    <img src="img/рубашка.svg" alt="Рубашка">
                 </div>`;
     }
 }
 
 // Функция подставляет рисунок  масти
 
-function suitePict(suite) {
+export function suitePict(suite) {
     let picture = "";
     if (suite === "s") {
-        picture = '"img/Spades.svg" alt="Пики"';
+        picture = '"./img/Spades.svg" alt="Пики"';
         return picture;
     }
     if (suite === "d") {
