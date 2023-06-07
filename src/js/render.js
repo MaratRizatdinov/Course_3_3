@@ -127,7 +127,7 @@ export async function renderGamePage({ contentElement }) {
     </div>`;
 
         contentElement.innerHTML = gamePageContent;
-        
+       
         
         
         
